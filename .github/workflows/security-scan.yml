@@ -1,0 +1,17 @@
+name: Security Scan
+
+on: [push, pull_request]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dockerfile Lint
+        uses: hadolint/hadolint-action@v2.0.0
+      - name: Scan for secrets
+        uses: zricethezav/gitleaks-action@v2
+      - name: Validate K8s manifests
+        uses: instrumenta/kubeval-action@master
+        with:
+          files: "manifests/"
